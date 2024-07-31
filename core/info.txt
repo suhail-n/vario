@@ -1,0 +1,5 @@
+ListView: app_name/model_name_list.html
+DetailView: app_name/model_name_detail.html
+CreateView: app_name/model_name_form.html
+UpdateView: app_name/model_name_form.html
+DeleteView: app_name/model_name_confirm_delete.html

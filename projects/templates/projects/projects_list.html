@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Projects List{% endblock %}
+{% block content %}
+    <style>
+    .no-link-style {
+      color: inherit;
+      text-decoration: none;
+    }
+    .project-item {
+        color: black;
+    }
+    .project-item:hover {
+      color: #fff;
+    }
+    </style>
+    <div class="hstack mb-5">
+        <p class="fs-3">Projects</p>
+        <div class="modal fade"
+             id="staticBackdrop"
+             data-bs-backdrop="static"
+             data-bs-keyboard="false"
+             tabindex="-1"
+             aria-labelledby="staticBackdropLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Project</h1>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'projects:create' %}">
+                                {% csrf_token %}
+                                {% include "form_errors.html" %}
+                                {{ form }}
+                                <div class="modal-footer justify-content-start">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button"
+                class="ms-auto btn btn-outline-secondary hstack project-item"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+            <i class="fs-5 bi bi-plus-square"></i>
+            <span class="ms-2">Create</span>
+        </button>
+    </div>
+    {% for project in projects %}
+        <a class="row justify-content-center no-link-style"
+           href="{% url 'projects:detail' project.uuid %}">
+            <button class="btn btn-outline-secondary hstack project-item p-2 border rounded col-md-8 shadow m-2 p-3">
+                <div>{{ project.name }}</div>
+                <i class="ms-auto bi bi-chevron-double-right"></i>
+            </button>
+        </a>
+    {% endfor %}
+    <!-- check if the length of the projects is 0 -->
+    {% if projects|length == 0 %}<p>No projects found...</p>{% endif %}
+{% endblock %}
+<!-- comment -->
+{% comment %}  {% for project in projects %}
+ <div class="card">
+     <div class="card-body">
+         <h5 class="card-title">{{ project.name }}</h5>
+         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+         <a href="#" class="btn btn-primary">Go somewhere</a>
+     </div>
+</div> {% endcomment %}
