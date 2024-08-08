@@ -1,6 +1,6 @@
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
-from django.views.generic import DetailView
+from django.http import HttpRequest
+from django.http import HttpResponse
+from django.shortcuts import redirect
 
 
 def index(request: HttpRequest) -> HttpResponse:

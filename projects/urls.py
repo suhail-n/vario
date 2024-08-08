@@ -1,6 +1,9 @@
 # urls file
-from django.urls import URLPattern, path
+from django.urls import URLPattern
+from django.urls import path
+
 from . import views
+
 
 app_name: str = "projects"
 urlpatterns: list[URLPattern] = [

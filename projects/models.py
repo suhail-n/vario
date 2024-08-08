@@ -1,8 +1,10 @@
 from uuid import uuid4
+
 from django.db import models
 from django.urls import reverse
 
 from environments.models import Environment
+
 
 # Create your models here.
 
