@@ -1,0 +1,12 @@
+.no-link-style {
+    color: inherit;
+    text-decoration: none;
+}
+
+.black-text {
+    color: black;
+}
+
+.h-text-white:hover {
+    color: #fff;
+}

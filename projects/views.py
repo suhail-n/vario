@@ -1,3 +1,4 @@
+from typing import TypedDict
 from uuid import UUID
 
 from django.db.models import Prefetch
@@ -5,6 +6,8 @@ from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+
+from environments.models import Environment
 
 from .forms import ProjectCreateForm
 from .models import FeatureFlag
@@ -15,7 +18,7 @@ from .models import Toggle
 # Create your views here.
 
 
-def list(request: HttpRequest) -> HttpResponse:
+def list_projects(request: HttpRequest) -> HttpResponse:
     projects = Project.objects.all()
     form = ProjectCreateForm()
     return render(
@@ -43,10 +46,13 @@ def detail(request: HttpRequest, uuid: UUID) -> HttpResponse:
     except Project.DoesNotExist:
         return redirect("projects:list")
 
-    project_details = []
-    feature_flag: FeatureFlag
-    for feature_flag in project.featureflag_set.all():
+    class ProjectDetails(TypedDict):
+        feature_flag: FeatureFlag
         toggle: Toggle
+        environment: Environment
+
+    project_details: list[ProjectDetails] = []
+    for feature_flag in project.featureflag_set.all():
         for toggle in feature_flag.toggle_set.all():
             project_details.append(
                 {

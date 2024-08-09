@@ -1,18 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Projects List{% endblock %}
 {% block content %}
-    <style>
-    .no-link-style {
-      color: inherit;
-      text-decoration: none;
-    }
-    .project-item {
-        color: black;
-    }
-    .project-item:hover {
-      color: #fff;
-    }
-    </style>
     <div class="hstack mb-5">
         <p class="fs-3">Projects</p>
         <div class="modal fade"
@@ -48,7 +36,7 @@
             </div>
         </div>
         <button type="button"
-                class="ms-auto btn btn-outline-secondary hstack project-item"
+                class="ms-auto btn btn-outline-secondary hstack black-text h-text-white"
                 data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop">
             <i class="fs-5 bi bi-plus-square"></i>
@@ -58,7 +46,7 @@
     {% for project in projects %}
         <a class="row justify-content-center no-link-style"
            href="{% url 'projects:detail' project.uuid %}">
-            <button class="btn btn-outline-secondary hstack project-item p-2 border rounded col-md-8 shadow m-2 p-3">
+            <button class="btn btn-outline-secondary hstack p-2 border rounded col-md-8 shadow m-2 p-3 black-text h-text-white">
                 <div>{{ project.name }}</div>
                 <i class="ms-auto bi bi-chevron-double-right"></i>
             </button>

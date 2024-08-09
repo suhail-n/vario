@@ -4,4 +4,21 @@
     <h1>Projects Detail Page</h1>
     <p>name: {{ project.name }}</p>
     <p>uuid: {{ project.uuid }}</p>
+    {% for project_detail in project_details %}
+        <a class="row justify-content-center no-link-style"
+           href="{% url 'projects:detail' project.uuid %}">
+            <button class="btn btn-outline-secondary hstack black-text h-text-white p-2 border rounded col-md-8 shadow m-2 p-3">
+                <div>{{ project_detail.feature_flag.name }}</div>
+                <div>{{ project_detail.environment.name }}</div>
+                <div>
+                    {% if project_detail.toggle.enabled %}
+                        ON
+                    {% else %}
+                        OFF
+                    {% endif %}
+                </div>
+                <i class="ms-auto bi bi-chevron-double-right"></i>
+            </button>
+        </a>
+    {% endfor %}
 {% endblock %}
