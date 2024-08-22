@@ -10,3 +10,7 @@
 .h-text-white:hover {
     color: #fff;
 }
+
+[class*='hover:cursor-pointer']:hover {
+    cursor: pointer;
+}

@@ -48,24 +48,28 @@ def detail(request: HttpRequest, uuid: UUID) -> HttpResponse:
 
     class ProjectDetails(TypedDict):
         feature_flag: FeatureFlag
-        toggle: Toggle
-        environment: Environment
+        toggles: list[Toggle]
 
     project_details: list[ProjectDetails] = []
+    environments = Environment.objects.all()
     for feature_flag in project.featureflag_set.all():
-        for toggle in feature_flag.toggle_set.all():
-            project_details.append(
-                {
-                    "feature_flag": feature_flag,
-                    "toggle": toggle,
-                    "environment": toggle.environment,
-                }
-            )
+        project_detail: ProjectDetails = {"feature_flag": feature_flag, "toggles": []}
+        toggles = feature_flag.toggle_set.all()
+        for env in environments:
+            for toggle in toggles:
+                if toggle.environment == env:
+                    project_detail["toggles"].append(toggle)
+                    break
+        project_details.append(project_detail)
 
     return render(
         request,
         "projects/projects_detail.html",
-        {"project": project, "project_details": project_details},
+        {
+            "project": project,
+            "project_details": project_details,
+            "environments": environments,
+        },
     )
 
 
@@ -75,3 +79,15 @@ def create(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             form.save()
     return redirect("projects:list")
+
+
+def update_toggle(request: HttpRequest, toggle_id: int) -> HttpResponse:
+    if request.method == "PUT":
+        try:
+            toggle = Toggle.objects.get(id=toggle_id)
+            toggle.enabled = not toggle.enabled
+            toggle.save()
+            return HttpResponse(status=204)
+        except Toggle.DoesNotExist:
+            return HttpResponse(status=404)
+    return HttpResponse(status=405)

@@ -3,6 +3,7 @@ from uuid import uuid4
 from django.db import models
 from django.urls import reverse
 
+from category.models import Category
 from environments.models import Environment
 
 
@@ -24,12 +25,22 @@ class Project(models.Model):
         return FeatureFlag.objects.filter(project=self)
 
 
+def get_default_category() -> Category:
+    return Category.objects.get(name=Category.CategoryChoices.RELEASE)
+
+
 class FeatureFlag(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     enabled = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        default=get_default_category,
+        null=True,
+    )
 
     def __str__(self) -> str:
         return self.name
