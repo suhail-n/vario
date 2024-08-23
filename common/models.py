@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 # Create your models here.
-class TimeStampMixin(models.Model):
+class TimestampMixin(models.Model):
     created_at = models.DateTimeField(default=timezone.now, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 

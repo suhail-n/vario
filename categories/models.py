@@ -4,10 +4,10 @@ from uuid import uuid4
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from common.models import TimeStampMixin
+from common.models import TimestampMixin
 
 
-class Category(TimeStampMixin):
+class Category(TimestampMixin):
     class CategoryChoices(models.TextChoices):
         RELEASE = "release", _("Freshman")
         OPERATIONAL = "operational", _("Operational")

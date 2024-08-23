@@ -4,14 +4,14 @@ from django.db import models
 from django.urls import reverse
 
 from categories.models import Category
-from common.models import TimeStampMixin
+from common.models import TimestampMixin
 from environments.models import Environment
 
 
 # Create your models here.
 
 
-class Project(TimeStampMixin):
+class Project(TimestampMixin):
     name = models.CharField(max_length=100)
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
 
@@ -33,7 +33,7 @@ def get_default_category() -> Category | None:
         return None
 
 
-class FeatureFlag(TimeStampMixin):
+class FeatureFlag(TimestampMixin):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     enabled = models.BooleanField(default=False)
@@ -54,7 +54,7 @@ class FeatureFlag(TimeStampMixin):
         return Toggle.objects.filter(feature_flag=self)
 
 
-class Toggle(TimeStampMixin):
+class Toggle(TimestampMixin):
     feature_flag = models.ForeignKey(FeatureFlag, on_delete=models.CASCADE)
     environment = models.ForeignKey(Environment, on_delete=models.CASCADE)
     enabled = models.BooleanField(default=False)
