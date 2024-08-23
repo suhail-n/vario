@@ -3,14 +3,15 @@ from uuid import uuid4
 from django.db import models
 from django.urls import reverse
 
-from category.models import Category
+from categories.models import Category
+from common.models import TimeStampMixin
 from environments.models import Environment
 
 
 # Create your models here.
 
 
-class Project(models.Model):
+class Project(TimeStampMixin):
     name = models.CharField(max_length=100)
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
 
@@ -25,11 +26,14 @@ class Project(models.Model):
         return FeatureFlag.objects.filter(project=self)
 
 
-def get_default_category() -> Category:
-    return Category.objects.get(name=Category.CategoryChoices.RELEASE)
+def get_default_category() -> Category | None:
+    try:
+        return Category.objects.get(name=Category.CategoryChoices.RELEASE)
+    except Category.DoesNotExist:
+        return None
 
 
-class FeatureFlag(models.Model):
+class FeatureFlag(TimeStampMixin):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     enabled = models.BooleanField(default=False)
@@ -50,7 +54,7 @@ class FeatureFlag(models.Model):
         return Toggle.objects.filter(feature_flag=self)
 
 
-class Toggle(models.Model):
+class Toggle(TimeStampMixin):
     feature_flag = models.ForeignKey(FeatureFlag, on_delete=models.CASCADE)
     environment = models.ForeignKey(Environment, on_delete=models.CASCADE)
     enabled = models.BooleanField(default=False)

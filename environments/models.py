@@ -2,11 +2,13 @@ from uuid import uuid4
 
 from django.db import models
 
+from common.models import TimeStampMixin
+
 
 # Create your models here.
 
 
-class Environment(models.Model):
+class Environment(TimeStampMixin):
     name = models.CharField(max_length=100)
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
 
