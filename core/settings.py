@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "projects",
     "environments",
     "common",
+    "categories",
 ]
 
 MIDDLEWARE = [
