@@ -1,0 +1,25 @@
+- model: categories.Category
+  pk: 1
+  fields:
+    name: release
+    description: Release feature flags, also known as rollout flags, are a strategic tool in software development that temporarily enables or disables features without altering the codebase. These flags are primarily used to manage the release of new or enhanced features to users in a controlled and incremental manner.
+- model: categories.Category
+  pk: 2
+  fields:
+    name: operational
+    description: Operational feature flags are a specialized type of feature flag used to manage and control the behavior of a system. These flags are essential for maintaining system stability, recovering from incidents, migrating infrastructure, and improving operational health
+- model: categories.Category
+  pk: 3
+  fields:
+    name: experiment
+    description: Experimental feature flags are particularly useful for performing multivariate or A/B testing, enabling developers to compare the effects of different code paths on user cohorts. This method is widely applied in optimizing user interfaces, such as ecommerce checkout flows or call-to-action buttons, by analyzing the performance metrics of different versions.
+- model: categories.Category
+  pk: 4
+  fields:
+    name: kill_switch
+    description: Kill switch feature flags are used to temporarily enable or disable features in a system.
+- model: categories.Category
+  pk: 5
+  fields:
+    name: permission
+    description: Permission feature flags are designed to control access to certain features or functionalities within an application based on a user's properties
