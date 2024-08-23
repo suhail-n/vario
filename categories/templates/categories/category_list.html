@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Feature Flag Categories{% endblock %}
+{% block content %}
+    <div class="hstack mb-5">
+        <p class="fs-3">Feature Flag Categories</p>
+    </div>
+    <div class="table-responsive border rounded">
+        <table class="table table-hover table-borderless">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.get_name_display }}</td>
+                        <td>{{ category.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- check if the length of the projects is 0 -->
+    {% if categories|length == 0 %}<p>No feature flag categories found...</p>{% endif %}
+{% endblock %}
