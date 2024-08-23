@@ -22,6 +22,7 @@
         <!-- Order matters. Should be after bootstrap -->
         <link rel="stylesheet" href="{% static 'app.css' %}">
         {% block css_files %}{% endblock %}
+        {% block js_files %}{% endblock %}
     </head>
     <body>
         {% include "navbar.html" %}

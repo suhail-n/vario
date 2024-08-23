@@ -1,24 +1,53 @@
 {% extends "base.html" %}
+{% load static %}
+{% block js_files %}
+    <script type="module" defer>
+    import { setFeatureToggleEventListener } from "{% static 'js/projects/projects_detail.mjs' %}";
+    setFeatureToggleEventListener();
+    </script>
+{% endblock %}
 {% block title %}Projects Detail{% endblock %}
 {% block content %}
-    <h1>Projects Detail Page</h1>
-    <p>name: {{ project.name }}</p>
-    <p>uuid: {{ project.uuid }}</p>
-    {% for project_detail in project_details %}
-        <a class="row justify-content-center no-link-style"
-           href="{% url 'projects:detail' project.uuid %}">
-            <button class="btn btn-outline-secondary hstack black-text h-text-white p-2 border rounded col-md-8 shadow m-2 p-3">
-                <div>{{ project_detail.feature_flag.name }}</div>
-                <div>{{ project_detail.environment.name }}</div>
-                <div>
-                    {% if project_detail.toggle.enabled %}
-                        ON
-                    {% else %}
-                        OFF
-                    {% endif %}
-                </div>
-                <i class="ms-auto bi bi-chevron-double-right"></i>
-            </button>
-        </a>
-    {% endfor %}
+    <div class="hstack mb-5">
+        <p class="fs-3">Feature Toggles</p>
+        {% url 'projects:create' as create_project %}
+        {% with modal_title="Add Feature Toggle" button_text="Create" form_action=create_project %}
+            {% include "includes/form_modal.html" %}
+        {% endwith %}
+    </div>
+    <div class="table-responsive border rounded">
+        <table class="table table-hover table-borderless">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Feature</th>
+                    {% for environment in environments %}
+                        {% with env_name=environment.name %}<th scope="col">{{ env_name | capfirst }}</th>{% endwith %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for project_detail in project_details %}
+                    <tr>
+                        <td>{{ project_detail.feature_flag.name }}</td>
+                        {% for toggle in project_detail.toggles %}
+                            {% with is_toggled=toggle.enabled %}
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <!-- add cursor to hover bootstrap class -->
+                                        <input class="form-check-input hover:cursor-pointer"
+                                               type="checkbox"
+                                               aria-checked="{% if is_toggled %}true{% else %}false{% endif %}"
+                                               role="switch"
+                                               name="feature-toggle"
+                                               id="{{ toggle.id }}"
+                                               {% if is_toggled %}checked{% endif %} />
+                                    </div>
+                                </td>
+                            {% endwith %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

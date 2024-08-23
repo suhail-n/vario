@@ -10,4 +10,9 @@ urlpatterns: list[URLPattern] = [
     path("", views.list_projects, name="list"),
     path("details/<uuid:uuid>/", views.detail, name="detail"),
     path("create", views.create, name="create"),
+    path(
+        "api/internal/toggles/<int:toggle_id>",
+        views.update_toggle,
+        name="toggle",
+    ),
 ]
