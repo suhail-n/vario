@@ -9,7 +9,7 @@ from common.models import TimestampMixin
 
 class Category(TimestampMixin):
     class CategoryChoices(models.TextChoices):
-        RELEASE = "release", _("Freshman")
+        RELEASE = "release", _("Release")
         OPERATIONAL = "operational", _("Operational")
         EXPERIMENTAL = "experiment", _("Experiment")
         KILL_SWITCH = "kill_switch", _("Kill Switch")
