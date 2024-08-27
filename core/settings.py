@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "environments",
     "common",
     "categories",
+    "feature_flags",
+    "toggles",
 ]
 
 MIDDLEWARE = [

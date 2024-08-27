@@ -7,7 +7,7 @@ import { getCsrfToken } from "../utilities.mjs";
 // string toggleid
 export async function updateToggle(toggleId) {
     const csrfToken = getCsrfToken();
-    return fetch(`/projects/api/internal/toggles/${toggleId}`, {
+    return fetch(`/api/internal/toggles/${toggleId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

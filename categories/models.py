@@ -22,4 +22,11 @@ class Category(TimestampMixin):
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
 
     def __str__(self) -> str:
-        return self.name
+        return self.get_name_display()
+
+
+def get_default_category() -> Category | None:
+    try:
+        return Category.objects.get(name=Category.CategoryChoices.RELEASE)
+    except Category.DoesNotExist:
+        return None

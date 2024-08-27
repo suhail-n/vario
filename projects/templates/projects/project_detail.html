@@ -10,8 +10,8 @@
 {% block content %}
     <div class="hstack mb-5">
         <p class="fs-3">Feature Toggles</p>
-        {% url 'projects:create' as create_project %}
-        {% with modal_title="Add Feature Toggle" button_text="Create" form_action=create_project %}
+        {% url 'feature_flags:create' project.uuid as create_feature_flag %}
+        {% with modal_title="Add Feature Toggle" button_text="Create" form_action=create_feature_flag %}
             {% include "includes/form_modal.html" %}
         {% endwith %}
     </div>

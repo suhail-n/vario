@@ -29,6 +29,8 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("projects/", include("projects.urls")),
     path("categories/", include("categories.urls")),
+    path("feature_flags/", include("feature_flags.urls")),
+    path("", include("toggles.urls")),
 ]
 
 # for development purposes

@@ -1,3 +1,4 @@
+{% load common_filters %}
 <div class="modal fade"
      id="staticBackdrop"
      data-bs-backdrop="static"
@@ -37,3 +38,11 @@
     <i class="fs-5 bi bi-plus-square"></i>
     <span class="ms-2">{{ button_text }}</span>
 </button>
+<!-- check if has_error_messages is true then display h2 -->
+{% if messages|has_error_messages %}
+    <script type="module">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector("button[data-bs-toggle='modal']").click()
+    })
+    </script>
+{% endif %}

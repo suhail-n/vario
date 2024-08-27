@@ -7,7 +7,7 @@ from categories.models import Category
 # Create your views here.
 
 
-class ListCategories(ListView):
+class ListCategories(ListView[Category]):
     # template name default will be category_list.html
     model = Category
     context_object_name = "categories"
