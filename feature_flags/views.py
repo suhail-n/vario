@@ -12,7 +12,6 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView
 
-from core import settings
 from environments.models import Environment
 from projects.models import Project
 from toggles.models import Toggle
@@ -25,6 +24,7 @@ class FeatureFlagCreateView(CreateView[FeatureFlag, FeatureFlagCreateForm]):
     model = FeatureFlag
     form_class = FeatureFlagCreateForm
     project_uuid: UUID
+    # template_name = "feature_flags/featureflag_form.html"
 
     def get_success_url(self) -> str:
         return cast(
@@ -43,8 +43,19 @@ class FeatureFlagCreateView(CreateView[FeatureFlag, FeatureFlagCreateForm]):
             uuid_val: UUID = cast(UUID, kwargs.get("project_uuid"))
             self.project_uuid = uuid_val
         except (TypeError, ValueError):
+            messages.error(request, "The project does not exist.")
             return redirect("projects:list")
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["project_uuid"] = self.project_uuid
+        return context
+
+    def get_form_kwargs(self) -> dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["project_uuid"] = self.project_uuid
+        return kwargs
 
     def form_valid(self, form: FeatureFlagCreateForm) -> HttpResponse:
         try:
@@ -59,17 +70,16 @@ class FeatureFlagCreateView(CreateView[FeatureFlag, FeatureFlagCreateForm]):
         environments = Environment.objects.all()
         for environment in environments:
             Toggle.objects.create(feature_flag=feature_flag, environment=environment)
-        self.request.session["SHOW_FORM_MODAL"] = False
         return super().form_valid(form)
 
-    def form_invalid(self, form: FeatureFlagCreateForm) -> HttpResponse:
-        for field in form:
-            if field.errors:
-                error = field.errors.as_text()
-                messages.error(self.request, error)
-            self.request.session["form_errors"] = form.errors
+    # def form_invalid(self, form: FeatureFlagCreateForm) -> HttpResponse:
+    #     for field in form:
+    #         if field.errors:
+    #             error = field.errors.as_text()
+    #             messages.error(self.request, error)
+    #         self.request.session["form_errors"] = form.errors
 
-        return redirect("projects:detail", uuid=self.project_uuid)
+    #     return redirect("projects:detail", uuid=self.project_uuid)
 
 
 @require_http_methods(["POST"])

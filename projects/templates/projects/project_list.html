@@ -3,10 +3,12 @@
 {% block content %}
     <div class="hstack mb-5">
         <p class="fs-3">Projects</p>
-        {% url 'projects:create' as create_project %}
-        {% with modal_title="Create Project" button_text="Create" form_action=create_project %}
-            {% include "includes/form_modal.html" %}
-        {% endwith %}
+        <a type="button"
+           class="ms-auto btn btn-outline-secondary hstack black-text h-text-white"
+           href="{% url 'projects:create' %}">
+            <i class="fs-5 bi bi-plus-square"></i>
+            <span class="ms-2">Create</span>
+        </a>
     </div>
     <div class="table-responsive border rounded">
         <table class="table table-hover table-borderless">
@@ -33,13 +35,3 @@
     <!-- check if the length of the projects is 0 -->
     {% if projects|length == 0 %}<p>No projects found...</p>{% endif %}
 {% endblock %}
-<!-- comment -->
-{% comment %} {% for project in projects %}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">{{ project.name }}</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-</div> {% endcomment %}

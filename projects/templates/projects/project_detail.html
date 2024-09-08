@@ -9,14 +9,17 @@
 {% block title %}Projects Detail{% endblock %}
 {% block content %}
     <div class="hstack mb-5">
-        <p class="fs-3">Feature Toggles</p>
-        {% url 'feature_flags:create' project.uuid as create_feature_flag %}
-        {% with modal_title="Add Feature Toggle" button_text="Create" form_action=create_feature_flag %}
-            {% include "includes/form_modal.html" %}
-        {% endwith %}
+        <p class="fs-3">{{ project.name }}</p>
+        <a type="button"
+           class="ms-auto btn btn-outline-secondary hstack black-text h-text-white"
+           href="{% url 'projects:feature_flags:create' project_uuid=project.uuid %}">
+            <i class="fs-5 bi bi-plus-square"></i>
+            <span class="ms-2">Create</span>
+        </a>
     </div>
     <div class="table-responsive border rounded">
-        <table class="table table-hover table-borderless">
+        <table class="table table-hover table-borderless caption-top">
+            <caption class="p-2">List of Feature Flags</caption>
             <thead class="table-light">
                 <tr>
                     <th scope="col">Feature</th>

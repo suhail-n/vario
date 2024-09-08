@@ -6,13 +6,16 @@ from uuid import UUID
 
 from django.db.models import Prefetch
 from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
+from django.views.generic import FormView
 from django.views.generic import ListView
 
 from environments.models import Environment
@@ -30,25 +33,14 @@ class ProjectListView(ListView[Project]):
     # default template
     # template_name = "projects/projects_list.html"
     # template_name = "projects/project_list.html"
-    form_class = ProjectCreateForm
+    # form_class = ProjectCreateForm
     context_object_name = "projects"
 
-    @typing.no_type_check
-    def get_context_data(self, **kwargs: Unpack[dict[str, Any]]) -> dict[str, Any]:
-        context: dict[str, Any] = super().get_context_data(**kwargs)
-        context["form"] = self.form_class()
-        return context
-
-
-# replaced by ProjectListView
-# def list_projects(request: HttpRequest) -> HttpResponse:
-#     projects = Project.objects.all()
-#     form = ProjectCreateForm()
-#     return render(
-#         request,
-#         "projects/projects_list.html",
-#         context={"projects": projects, "form": form},
-# )
+    # @typing.no_type_check
+    # def get_context_data(self, **kwargs: Unpack[dict[str, Any]]) -> dict[str, Any]:
+    #     context: dict[str, Any] = super().get_context_data(**kwargs)
+    #     context["form"] = self.form_class()
+    #     return context
 
 
 class ProjectCreateView(CreateView[Project, ProjectCreateForm]):
@@ -61,15 +53,6 @@ class ProjectCreateView(CreateView[Project, ProjectCreateForm]):
     #         self.request.user
     #     )  # Assuming you want to assign the current user as the creator
     #     return super().form_valid(form)
-
-
-# replaced by ProjectCreateView
-# def create(request: HttpRequest) -> HttpResponse:
-#     if request.method == "POST":
-#         form = ProjectCreateForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#     return redirect("projects:list")
 
 
 class ProjectDetailView(DetailView[Project]):
@@ -92,7 +75,7 @@ class ProjectDetailView(DetailView[Project]):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         project: Project = context["project"]
-        context["form"] = FeatureFlagCreateForm()
+        # context["form"] = FeatureFlagCreateForm()
 
         class ProjectDetails(TypedDict):
             feature_flag: FeatureFlag
@@ -105,12 +88,17 @@ class ProjectDetailView(DetailView[Project]):
                 "feature_flag": feature_flag,
                 "toggles": [],
             }
-            toggles = feature_flag.toggle_set.all()
+            # toggles = feature_flag.toggle_set.all()
             for env in environments:
-                for toggle in toggles:
-                    if toggle.environment == env:
-                        project_detail["toggles"].append(toggle)
-                        break
+                # we do this incase more environments are added in the future
+                toggle, _ = Toggle.objects.get_or_create(
+                    feature_flag=feature_flag, environment=env
+                )
+                project_detail["toggles"].append(toggle)
+                # for toggle in toggles:
+                #     if toggle.environment == env:
+                #         project_detail["toggles"].append(toggle)
+                #         break
             project_details.append(project_detail)
         context["project_details"] = project_details
         context["environments"] = environments

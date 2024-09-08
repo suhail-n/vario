@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third party apps
+    "crispy_forms",
+    "crispy_bootstrap5",
     # my apps
     "accounts",
     "projects",
@@ -149,3 +152,8 @@ AUTH_USER_MODEL = "accounts.User"
 # django stubs
 django_stubs_ext.monkeypatch()  # type: ignore
 DJANGO_STUBS_ENABLED = True
+
+
+# CRISPY FORMS BOOTSTRAP 5
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

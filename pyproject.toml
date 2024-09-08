@@ -10,6 +10,8 @@ python = "^3.12"
 django = "^5.0.7"
 django-stubs-ext = "^5.0.4"
 django-stubs = "^5.0.4"
+django-crispy-forms = "^2.3"
+crispy-bootstrap5 = "^2024.2"
 
 
 [tool.poetry.group.dev.dependencies]

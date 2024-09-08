@@ -1,4 +1,5 @@
 {% load common_filters %}
+{% load crispy_forms_tags %}
 <div class="modal fade"
      id="staticBackdrop"
      data-bs-backdrop="static"
@@ -19,8 +20,10 @@
                 <div class="modal-body">
                     <form method="post" action="{{ form_action }}">
                         {% csrf_token %}
+                        {% comment %}
                         {% include "form_errors.html" %}
-                        {{ form }}
+                        {% endcomment %}
+                        {{ form | crispy }}
                         <div class="modal-footer justify-content-start">
                             <button type="submit" class="btn btn-primary">Submit</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -38,8 +41,8 @@
     <i class="fs-5 bi bi-plus-square"></i>
     <span class="ms-2">{{ button_text }}</span>
 </button>
-<!-- check if has_error_messages is true then display h2 -->
-{% if messages|has_error_messages %}
+<!-- check if form has errors -->
+{% if form.errors %}
     <script type="module">
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelector("button[data-bs-toggle='modal']").click()

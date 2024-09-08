@@ -4,10 +4,11 @@ from django.utils.translation import gettext_lazy as _
 from categories.models import Category
 from categories.models import get_default_category
 from feature_flags.models import FeatureFlag
+from projects.models import Project
 
 
 class FeatureFlagCreateForm(forms.ModelForm[FeatureFlag]):
-    template_name = "form_templates/bootstrap_form.html"
+    # template_name = "form_templates/bootstrap_form.html"
     category: forms.ModelChoiceField[Category] = forms.ModelChoiceField(
         queryset=Category.objects.all(),
         initial=get_default_category,
@@ -17,28 +18,18 @@ class FeatureFlagCreateForm(forms.ModelForm[FeatureFlag]):
 
     class Meta:
         model = FeatureFlag
-        fields = ["name", "category", "description"]
+        fields = ["name", "category", "description", "project"]
 
     def __init__(self, *args, **kwargs):
+        self.project_uuid = kwargs.pop("project_uuid")
         super().__init__(*args, **kwargs)
-
-        # Get all Category instances
-        categories = Category.objects.all()
-
-        # Create a dictionary mapping object IDs to friendly names
-        choices = [(str(cat.id), cat.get_name_display()) for cat in categories]
-
-        # Set the choices for the category field
-        self.fields["category"].choices = choices
-
-        # Set the widget to a Select widget
-        self.fields["category"].widget = forms.Select()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
         try:
-            old_form_data = self.request.session["form_errors"]
-            context["form"] = self.form_class(old_form_data)
-        except:
-            context["form"] = self.form_class()
-        return context
+            self.project = Project.objects.get(uuid=self.project_uuid)
+            self.fields["project"].initial = self.project
+            # add hidden input for project
+            self.fields["project"].widget = forms.HiddenInput()
+        except Project.DoesNotExist:
+            # handle the case where the project does not exist
+            raise forms.ValidationError(_("Project does not exist"))
+        # set crispy form textbox row attribute
+        self.fields["description"].widget.attrs["rows"] = 6
